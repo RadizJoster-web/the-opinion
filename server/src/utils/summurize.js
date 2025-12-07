@@ -25,7 +25,7 @@ Contoh Output yang Diharapkan: "kinerja pemerintah statistik"
 Contoh Input Kueri: "Apa resep terbaik untuk membuat kue coklat yang lembut?"
 Contoh Output yang Diharapkan: "resep kue coklat lembut"
 
-Dan gunakan bahasa sesuai dengan code: ${lang}
+Berikan jawaban sesuai code bahasa: ${lang}. Tapi jika kueri dan code bahasa sudah sesuai contoh: [asian people] dan code bahasa: en, maka tetap jawab dalam bahasa inggris.
 
 kueri: ${text}
 `,
