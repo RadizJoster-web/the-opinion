@@ -10,12 +10,13 @@ async function relation_with_py(
   TWEET_TOKEN
 ) {
   //   If date_from and until undifined or null so this function generated default value from 5 monts ago & untli today
-  let default_date_from = "";
-  let default_date_until = "";
+  let default_date_from = date_from;
+  let default_date_until = date_until;
 
   if (
     date_from === "" ||
-    (date_from === undefined && date_until === "") ||
+    date_from === undefined ||
+    date_until === "" ||
     date_until === undefined
   ) {
     const { generate_date_from, generate_date_until } = generate_date_range(
@@ -36,10 +37,12 @@ async function relation_with_py(
     TWEET_TOKEN: TWEET_TOKEN,
   };
 
+  console.log(input_data);
+
   return new Promise((resolve, reject) => {
     try {
-      const python_process = spawn("./machine_learning/venv/bin/python3", [
-        "./machine_learning/app.py",
+      const python_process = spawn("machine_learning/venv/bin/python3", [
+        "machine_learning/app.py",
       ]);
 
       let python_output = "";
@@ -79,10 +82,15 @@ async function relation_with_py(
           resolve(result);
           // Jika ingin mengembalikan string mentah: resolve(python_output.toString());
         } catch (e) {
-          console.error("Failed to parse JSON output from Python:", e);
+          console.error("Crawling faild, Data not foud, try another date:", e);
           console.log("Raw Output:", python_output);
           // Tolak Promise jika parsing gagal
-          reject(new Error("Failed to parse JSON output from Python."));
+          reject(
+            new Error({
+              status: 404,
+              message: "Crawling faild, Data not foud, try another date",
+            })
+          );
         }
       });
     } catch (err) {

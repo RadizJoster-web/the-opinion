@@ -4,7 +4,7 @@ import json
 
 import pre_processing
 import extraksi_fitur
-import analisis_sentiment
+import server.machine_learning.analisis_sentiment_en as analisis_sentiment_en
 
 # Take data from node
 data_from_node = sys.stdin.read()
@@ -37,7 +37,7 @@ def main():
 
     # 3. SENTIMENT ANALYSIS
     # Capturing the returned DataFrame with new 'Sentimen' dan 'Polarity' columns
-    labeled_data = analisis_sentiment.analisis_sentiment(clean_data)
+    labeled_data = analisis_sentiment_en.analisis_sentiment(clean_data)
     
     # 4. FEATURE EXTRACTION (TF-IDF)
     # X is the sparse numerical matrix

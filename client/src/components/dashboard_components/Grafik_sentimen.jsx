@@ -27,6 +27,7 @@ export default function Grafik_sentimen({ total_tweets, data_preview }) {
         day: "numeric",
       });
     } catch (e) {
+      console.log(e);
       return isoString; // Fallback
     }
   };

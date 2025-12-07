@@ -5,8 +5,7 @@ import json
 import crawling
 import pre_processing
 import extraksi_fitur
-import analisis_sentiment
-# import model_training # Optional: Next logical step for ML
+import analisis_sentiment_en
 
 # Take data from node
 data_from_node = sys.stdin.read()
@@ -48,8 +47,19 @@ def main():
     clean_data = pre_processing.pre_processing(data_tweets) 
 
     # 3. SENTIMENT ANALYSIS
-    # Capturing the returned DataFrame with new 'Sentimen' dan 'Polarity' columns
-    labeled_data = analisis_sentiment.analisis_sentiment(clean_data)
+    # ----------------------------------------------------------------------
+    # if lang.lower() == 'id':
+    #     # Panggil fungsi yang memproses DataFrame di analisis_sentiment_id
+    #     # Nama fungsi yang benar adalah analisis_sentiment_indobert
+    #     labeled_data = analisis_sentiment_id.analisis_sentiment_indobert(clean_data) 
+    # elif lang.lower() == 'en':
+    #     # Panggil fungsi yang memproses DataFrame di analisis_sentiment_en
+    #     # Nama fungsi yang benar adalah analisis_sentiment
+    labeled_data = analisis_sentiment_en.analisis_sentiment(clean_data)
+    # else:
+    #     # Default ke Bahasa Inggris
+    #     labeled_data = analisis_sentiment_en.analisis_sentiment(clean_data)
+    # ----------------------------------------------------------------------
     
     # 4. FEATURE EXTRACTION (TF-IDF)
     # X is the sparse numerical matrix
@@ -58,7 +68,6 @@ def main():
     # ------------------------------------------------------------
     # 5. FINAL RESULTS GENERATION (PENTING UNTUK NODE.JS)
     # ------------------------------------------------------------
-        
     # Ambil data esensial untuk dikirim kembali
     # Membuat summary statistik
     sentiment_summary = labeled_data["sentiment"].value_counts().to_dict()
@@ -72,6 +81,7 @@ def main():
     final_output = {
         "status": "success",
         "message": "Pipeline Executed Successfully. Data is ready.",
+        "language_used": lang.upper() if lang else "EN (Default)",
         "total_tweets": len(labeled_data),
         "sentiment_summary": sentiment_summary,
         "fitur_ekstraksi_info": {

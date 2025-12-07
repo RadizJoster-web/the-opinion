@@ -1,4 +1,4 @@
-function generate_date_range(inputDateFrom, inputDateUntil) {
+function generate_date_range() {
   // Setup date_untl (today)
   const date_until_obj = new Date(); // current Date
   const until_year = date_until_obj.getFullYear(); // get year

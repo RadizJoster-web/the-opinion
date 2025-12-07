@@ -58,10 +58,28 @@ app.post("/search-opinion", async (req, res) => {
     });
   }
 
-  const search_keyword = await summurize(title_crawling);
-  console.log("Generated keyword:", search_keyword);
+  let search_keyword;
+
+  try {
+      // Panggil fungsi yang menggunakan API (yang berpotensi error)
+      search_keyword = await summurize(title_crawling);
+      console.log("Generated keyword:", search_keyword);
+
+  } catch (error) {
+      // 🛑 TANGKAP ERROR DI SINI!
+      console.error("❌ ERROR: Gagal menghasilkan search keyword (Gemini API Quota Exceeded atau Error lainnya).");
+      console.error("Detail Error:", error.message);
+
+      // Anda harus menghentikan proses atau menggunakan fallback.
+      // Opsi 1: Hentikan eksekusi
+      // throw new Error("Proses dibatalkan karena kegagalan summurize."); 
+
+      // Opsi 2: Gunakan title_crawling sebagai nilai fallback
+      search_keyword = title_crawling; 
+  }
 
   const int_limit = parseInt(limit);
+
   try {
     console.log("Crawling data from twitter...");
     const python_output = await relation_with_py(
@@ -83,7 +101,10 @@ app.post("/search-opinion", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ success: false, message: "Server failed" });
+    return res.status(404).json({
+      success: false,
+      message: "Crawling faild, Data not foud, try other date",
+    });
   }
 });
 

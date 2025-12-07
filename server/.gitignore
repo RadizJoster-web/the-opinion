@@ -1,3 +1,4 @@
 # Ignore dotenv files (do not push secrets to GitHub)
+.gitignore
 .env
 .env.* 
